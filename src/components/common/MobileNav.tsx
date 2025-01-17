@@ -12,12 +12,15 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet";
-import { LoginLink, RegisterLink } from "@kinde-oss/kinde-auth-nextjs";
+import { LoginLink, LogoutLink, RegisterLink } from "@kinde-oss/kinde-auth-nextjs";
+import { UserWithLanguages } from "@/types/dashboard";
 
 const MobileNav = ({
   navLinks,
+  user
 }: {
   navLinks: { href: string; label: string }[];
+  user: UserWithLanguages;
 }) => {
   const [open, setOpen] = useState(false);
 
@@ -50,7 +53,8 @@ const MobileNav = ({
               {link.label}
             </Link>
           ))}
-          <LoginLink
+          {
+            user ? <><LoginLink
             className={buttonVariants({ variant: "ghost" })}
           >
             Sign In
@@ -59,7 +63,8 @@ const MobileNav = ({
             className={buttonVariants({ variant: "default" })}
           >
             Sign Up
-          </RegisterLink>
+          </RegisterLink></> : <><LogoutLink className={buttonVariants({variant: "secondary"})}>Log out</LogoutLink></>
+          }
         </div>
       </SheetContent>
     </Sheet>

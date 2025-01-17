@@ -13,7 +13,6 @@ import { auth } from "@/lib/auth";
 
 const Navbar = async () => {
   const user = await auth({ required: false, redirect: false });
-  console.log(`user`, user);
 
   const navLinks = [
     {
@@ -74,7 +73,9 @@ const Navbar = async () => {
               </>
             )}
           </div>
-          <MobileNav navLinks={navLinks} />
+          <MobileNav navLinks={navLinks}
+            user={user}
+          />
         </div>
       </MaxWidthWrapper>
     </nav>
