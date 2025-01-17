@@ -1,0 +1,115 @@
+// prisma/schema.prisma
+datasource db {
+  provider  = "postgresql"
+  url  	    = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+    id String @id @default(cuid())
+    email String @unique
+    name String 
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt 
+
+    languages LanguageProgress[]
+    sessions StudySession[]
+    goals Goal[]
+
+    @@map("users")
+}
+
+model Language { 
+    id String @id @default(cuid())
+    name String @unique
+    code String @unique 
+    learners LanguageProgress[]
+    sessions StudySession[]
+    goals Goal[]
+
+    @@map("languages")
+}
+
+model LanguageProgress {
+    id String @id @default(cuid())
+    userId String 
+    languageId String 
+    level Level @default(BEGINNER)
+    targetLevel Level
+    startedAt DateTime @default(now())
+    totalMinutes Int @default(0)
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    language Language @relation(fields: [languageId], references: [id], onDelete: Cascade)
+    @@unique([userId, languageId])
+    @@map("language_progress")
+}
+
+model StudySession {
+    id String @id @default(cuid())
+    userId String
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    languageId String 
+    language Language @relation(fields: [languageId], references: [id], onDelete: Cascade)
+    date DateTime @default(now())
+    duration Int
+    type ActivityType
+    description String?
+    difficulty Difficulty? 
+    archived Boolean @default(false)
+    createdAt DateTime @default(now())
+    @@index([userId, languageId])
+    @@map("study_sessions")
+}
+
+model Goal {
+    id String @id @default(cuid())
+    userId String
+    languageId String
+    target Int
+    deadline DateTime
+    activityType ActivityType 
+    status GoalStatus @default(NOT_STARTED)
+    archived Boolean @default(false)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    language Language @relation(fields: [languageId], references: [id], onDelete: Cascade)
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    @@index([userId, languageId])
+    @@map("goals")
+}
+
+enum Level {
+  BEGINNER
+  ELEMENTARY
+  INTERMEDIATE
+  UPPER_INTERMEDIATE
+  ADVANCED
+  MASTERY
+}
+
+enum ActivityType {
+  READING
+  LISTENING
+  SPEAKING
+  WRITING
+  VOCABULARY
+  GRAMMAR
+  IMMERSION
+  OTHER
+}
+
+enum Difficulty {
+  EASY
+  JUST_RIGHT
+  CHALLENGING
+  VERY_HARD
+}
+
+enum GoalStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}

@@ -1,0 +1,16 @@
+export const COMMON_LANGUAGES = [
+    { name: 'Arabic', code: 'ar' },
+    { name: 'Chinese (Mandarin)', code: 'zh' },
+    { name: 'English', code: 'en' },
+    { name: 'French', code: 'fr' },
+    { name: 'German', code: 'de' },
+    { name: 'Hindi', code: 'hi' },
+    { name: 'Italian', code: 'it' },
+    { name: 'Japanese', code: 'ja' },
+    { name: 'Korean', code: 'ko' },
+    { name: 'Portuguese', code: 'pt' },
+    { name: 'Russian', code: 'ru' },
+    { name: 'Spanish', code: 'es' },
+    { name: 'Turkish', code: 'tr' },
+    { name: 'Vietnamese', code: 'vi' },
+  ] as const; 
